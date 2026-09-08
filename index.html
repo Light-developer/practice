@@ -9,36 +9,29 @@
   <script>
     tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] }, boxShadow: { soft: '0 20px 60px rgba(28,25,23,.08)' } } } };
   </script>
-  <style>
-    html { scroll-behavior: smooth; }
-    body { overflow-x: hidden; }
-    .hero-grid { background-image: linear-gradient(rgba(231,229,228,.55) 1px, transparent 1px), linear-gradient(90deg, rgba(231,229,228,.55) 1px, transparent 1px); background-size: 42px 42px; }
-    .product-card { transition: transform .3s ease, box-shadow .3s ease; }
-    .product-card:hover { transform: translateY(-5px); box-shadow: 0 20px 45px rgba(28,25,23,.10); }
-    .product-image { transition: transform .6s cubic-bezier(.2,.8,.2,1); }
-    .product-card:hover .product-image { transform: scale(1.06); }
-    .cart-enter { animation: cartIn .28s ease-out; }
-    .mobile-menu-enter { animation: mobileMenuIn .22s ease-out; }
-    @keyframes cartIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-    @keyframes mobileMenuIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body class="bg-stone-50 text-stone-900 antialiased">
   <header class="sticky top-0 z-40 border-b border-stone-200/80 bg-stone-50/90 backdrop-blur-xl">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
       <a href="#" class="text-xl font-black tracking-tight">NOVA<span class="text-orange-500">.</span></a>
+
       <nav class="hidden items-center gap-8 text-sm font-semibold md:flex">
         <a href="#shop" class="transition hover:text-orange-500">Shop</a>
         <a href="#about" class="transition hover:text-orange-500">About</a>
         <a href="#contact" class="transition hover:text-orange-500">Contact</a>
       </nav>
+
       <div class="flex items-center gap-2">
         <button id="cartBtn" class="relative rounded-full border border-stone-300 bg-white p-2.5 transition hover:border-stone-900 hover:shadow-sm" aria-label="Open cart">
           <span aria-hidden="true">🛒</span>
           <span id="cartCount" class="absolute -right-1 -top-1 hidden min-w-5 rounded-full bg-orange-500 px-1 text-center text-xs font-bold leading-5 text-white">0</span>
         </button>
+
         <button id="menuBtn" class="rounded-full border border-stone-300 bg-white p-2.5 transition hover:border-stone-900 md:hidden" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
-          <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+          <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
         </button>
       </div>
     </div>
@@ -56,85 +49,88 @@
     <section class="hero-grid relative overflow-hidden border-b border-stone-200">
       <div class="mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 lg:grid-cols-2 lg:px-8 lg:py-24">
         <div>
-          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-stone-600 backdrop-blur"><span class="h-2 w-2 rounded-full bg-orange-500"></span> New season / 2026</div>
+          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-stone-600 backdrop-blur">
+            <span class="h-2 w-2 rounded-full bg-orange-500"></span>
+            New season / 2026
+          </div>
           <h1 class="max-w-2xl text-5xl font-black leading-[.94] tracking-[-0.04em] sm:text-6xl lg:text-7xl xl:text-8xl">Simple things.<br><span class="text-orange-500">Better made.</span></h1>
           <p class="mt-7 max-w-xl text-lg leading-8 text-stone-600">Thoughtful everyday pieces designed for comfort, function, and a little more joy.</p>
-          <div class="mt-9 flex flex-wrap gap-3"><a href="#shop" class="inline-flex items-center rounded-full bg-stone-900 px-7 py-3.5 font-bold text-white transition hover:-translate-y-0.5 hover:bg-orange-500">Shop the collection <span class="ml-2">→</span></a><a href="#about" class="inline-flex items-center rounded-full border border-stone-300 bg-white/80 px-7 py-3.5 font-bold transition hover:border-stone-900">Why NOVA</a></div>
-          <div class="mt-10 flex flex-wrap gap-6 text-sm text-stone-500"><span>✓ Premium materials</span><span>✓ Thoughtful design</span><span>✓ Easy returns</span></div>
+          <div class="mt-9 flex flex-wrap gap-3">
+            <a href="#shop" class="inline-flex items-center rounded-full bg-stone-900 px-7 py-3.5 font-bold text-white transition hover:-translate-y-0.5 hover:bg-orange-500">Shop the collection <span class="ml-2">→</span></a>
+            <a href="#about" class="inline-flex items-center rounded-full border border-stone-300 bg-white/80 px-7 py-3.5 font-bold transition hover:border-stone-900">Why NOVA</a>
+          </div>
+          <div class="mt-10 flex flex-wrap gap-6 text-sm text-stone-500">
+            <span>✓ Premium materials</span>
+            <span>✓ Thoughtful design</span>
+            <span>✓ Easy returns</span>
+          </div>
         </div>
-        <div class="relative"><div class="absolute -inset-5 rounded-[3rem] bg-orange-100/60 blur-3xl"></div><div class="relative overflow-hidden rounded-[2rem] bg-stone-200 shadow-soft"><img class="h-[480px] w-full object-cover sm:h-[560px]" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=85" alt="Minimal wristwatch" /><div class="absolute bottom-5 left-5 rounded-2xl bg-white/90 px-5 py-4 shadow-lg backdrop-blur"><p class="text-xs font-bold uppercase tracking-widest text-stone-500">Featured piece</p><p class="mt-1 font-black">Arc Watch · $129</p></div></div></div>
+
+        <div class="relative">
+          <div class="absolute -inset-5 rounded-[3rem] bg-orange-100/60 blur-3xl"></div>
+          <div class="relative overflow-hidden rounded-[2rem] bg-stone-200 shadow-soft">
+            <img class="h-[480px] w-full object-cover sm:h-[560px]" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=85" alt="Minimal wristwatch" />
+            <div class="absolute bottom-5 left-5 rounded-2xl bg-white/90 px-5 py-4 shadow-lg backdrop-blur">
+              <p class="text-xs font-bold uppercase tracking-widest text-stone-500">Featured piece</p>
+              <p class="mt-1 font-black">Arc Watch · $129</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <section id="shop" class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
-      <div class="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p class="text-xs font-black uppercase tracking-[0.25em] text-orange-500">The collection</p><h2 class="mt-2 text-4xl font-black tracking-tight">Shop favorites</h2><p class="mt-2 text-stone-500">Eight everyday essentials. Nothing unnecessary.</p></div><div class="flex flex-wrap gap-2" id="filters"><button data-filter="all" class="filter rounded-full bg-stone-900 px-4 py-2 text-sm font-bold text-white transition">All</button><button data-filter="accessories" class="filter rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-bold transition hover:border-stone-900">Accessories</button><button data-filter="home" class="filter rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-bold transition hover:border-stone-900">Home</button></div></div>
+      <div class="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[0.25em] text-orange-500">The collection</p>
+          <h2 class="mt-2 text-4xl font-black tracking-tight">Shop favorites</h2>
+          <p class="mt-2 text-stone-500">Eight everyday essentials. Nothing unnecessary.</p>
+        </div>
+        <div class="flex flex-wrap gap-2" id="filters">
+          <button data-filter="all" class="filter rounded-full bg-stone-900 px-4 py-2 text-sm font-bold text-white transition">All</button>
+          <button data-filter="accessories" class="filter rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-bold transition hover:border-stone-900">Accessories</button>
+          <button data-filter="home" class="filter rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-bold transition hover:border-stone-900">Home</button>
+        </div>
+      </div>
       <div id="products" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"></div>
     </section>
 
-    <section id="about" class="border-y border-stone-200 bg-white"><div class="mx-auto max-w-7xl px-5 py-20 lg:px-8"><div class="max-w-2xl"><p class="text-xs font-black uppercase tracking-[0.25em] text-orange-500">The NOVA promise</p><h2 class="mt-3 text-4xl font-black tracking-tight">Designed for the everyday.</h2><p class="mt-4 leading-7 text-stone-600">We believe useful objects should also feel good to own. So we focus on durable materials, simple forms, and details that earn their place in your day.</p></div><div class="mt-12 grid gap-8 sm:grid-cols-3"><div class="border-t border-stone-200 pt-5"><div class="mb-4 text-2xl">✦</div><h3 class="font-black">Made to last</h3><p class="mt-2 text-sm leading-6 text-stone-600">Durable materials and timeless designs over disposable trends.</p></div><div class="border-t border-stone-200 pt-5"><div class="mb-4 text-2xl">↗</div><h3 class="font-black">Free delivery</h3><p class="mt-2 text-sm leading-6 text-stone-600">Free standard shipping on orders over $100.</p></div><div class="border-t border-stone-200 pt-5"><div class="mb-4 text-2xl">♡</div><h3 class="font-black">Easy returns</h3><p class="mt-2 text-sm leading-6 text-stone-600">Changed your mind? Return your order within 30 days.</p></div></div></div></section>
+    <section id="about" class="border-y border-stone-200 bg-white">
+      <div class="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+        <div class="max-w-2xl">
+          <p class="text-xs font-black uppercase tracking-[0.25em] text-orange-500">The NOVA promise</p>
+          <h2 class="mt-3 text-4xl font-black tracking-tight">Designed for the everyday.</h2>
+          <p class="mt-4 leading-7 text-stone-600">We believe useful objects should also feel good to own. So we focus on durable materials, simple forms, and details that earn their place in your day.</p>
+        </div>
+        <div class="mt-12 grid gap-8 sm:grid-cols-3">
+          <div class="border-t border-stone-200 pt-5"><div class="mb-4 text-2xl">✦</div><h3 class="font-black">Made to last</h3><p class="mt-2 text-sm leading-6 text-stone-600">Durable materials and timeless designs over disposable trends.</p></div>
+          <div class="border-t border-stone-200 pt-5"><div class="mb-4 text-2xl">↗</div><h3 class="font-black">Free delivery</h3><p class="mt-2 text-sm leading-6 text-stone-600">Free standard shipping on orders over $100.</p></div>
+          <div class="border-t border-stone-200 pt-5"><div class="mb-4 text-2xl">♡</div><h3 class="font-black">Easy returns</h3><p class="mt-2 text-sm leading-6 text-stone-600">Changed your mind? Return your order within 30 days.</p></div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer id="contact" class="bg-stone-950 text-stone-300"><div class="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-12 sm:flex-row sm:items-center sm:justify-between lg:px-8"><div><p class="font-black text-white">NOVA<span class="text-orange-500">.</span></p><p class="mt-1 text-sm">Everyday essentials, thoughtfully designed.</p></div><div class="text-sm text-stone-500">© 2026 Nova Studio</div></div></footer>
+  <footer id="contact" class="bg-stone-950 text-stone-300">
+    <div class="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-12 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+      <div><p class="font-black text-white">NOVA<span class="text-orange-500">.</span></p><p class="mt-1 text-sm">Everyday essentials, thoughtfully designed.</p></div>
+      <div class="text-sm text-stone-500">© 2026 Nova Studio</div>
+    </div>
+  </footer>
 
-  <div id="cartPanel" class="fixed inset-y-0 right-0 z-50 hidden w-full max-w-md border-l border-stone-200 bg-white p-6 shadow-2xl"><div class="flex items-center justify-between"><div><p class="text-xs font-bold uppercase tracking-widest text-orange-500">NOVA</p><h2 class="text-2xl font-black">Your cart</h2></div><button id="closeCart" class="rounded-full p-2 text-2xl leading-none transition hover:bg-stone-100" aria-label="Close cart">×</button></div><div id="cartItems" class="mt-8 max-h-[65vh] space-y-4 overflow-y-auto pr-1"></div><div class="absolute bottom-0 left-0 right-0 border-t border-stone-200 bg-white p-6"><div class="flex justify-between font-bold"><span>Total</span><span id="cartTotal">$0.00</span></div><button class="mt-4 w-full rounded-full bg-stone-900 py-3.5 font-bold text-white transition hover:bg-orange-500" onclick="alert('Demo checkout — connect your payment provider here.')">Checkout →</button></div></div>
+  <div id="cartPanel" class="fixed inset-y-0 right-0 z-50 hidden w-full max-w-md border-l border-stone-200 bg-white p-6 shadow-2xl">
+    <div class="flex items-center justify-between">
+      <div><p class="text-xs font-bold uppercase tracking-widest text-orange-500">NOVA</p><h2 class="text-2xl font-black">Your cart</h2></div>
+      <button id="closeCart" class="rounded-full p-2 text-2xl leading-none transition hover:bg-stone-100" aria-label="Close cart">×</button>
+    </div>
+    <div id="cartItems" class="mt-8 max-h-[65vh] space-y-4 overflow-y-auto pr-1"></div>
+    <div class="absolute bottom-0 left-0 right-0 border-t border-stone-200 bg-white p-6">
+      <div class="flex justify-between font-bold"><span>Total</span><span id="cartTotal">$0.00</span></div>
+      <button id="checkoutBtn" class="mt-4 w-full rounded-full bg-stone-900 py-3.5 font-bold text-white transition hover:bg-orange-500">Checkout →</button>
+    </div>
+  </div>
   <div id="overlay" class="fixed inset-0 z-40 hidden bg-black/30 backdrop-blur-[2px]"></div>
 
-  <script>
-    const products = [
-      { id: 1, name: 'Arc Watch', price: 129, category: 'accessories', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80' },
-      { id: 2, name: 'Canvas Tote', price: 48, category: 'accessories', image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=700&q=80' },
-      { id: 3, name: 'Ceramic Set', price: 64, category: 'home', image: 'https://images.unsplash.com/photo-1493106819501-66d381c466f1?auto=format&fit=crop&w=700&q=80' },
-      { id: 4, name: 'Daily Lamp', price: 89, category: 'home', image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=80' },
-      { id: 5, name: 'Field Bottle', price: 35, category: 'accessories', image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=700&q=80' },
-      { id: 6, name: 'Soft Throw', price: 72, category: 'home', image: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=700&q=80' },
-      { id: 7, name: 'Desk Tray', price: 42, category: 'home', image: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=700&q=80' },
-      { id: 8, name: 'Leather Wallet', price: 58, category: 'accessories', image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=700&q=80' }
-    ];
-    let cart = JSON.parse(localStorage.getItem('nova-cart') || '[]');
-    const money = n => `$${n.toFixed(2)}`;
-    function renderProducts(filter = 'all') {
-      document.getElementById('products').innerHTML = products.filter(p => filter === 'all' || p.category === filter).map(p => `<article class="product-card group overflow-hidden rounded-2xl bg-white ring-1 ring-stone-200"><div class="relative overflow-hidden bg-stone-100"><img src="${p.image}" alt="${p.name}" class="product-image h-72 w-full object-cover" loading="lazy"><span class="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-black uppercase tracking-wider backdrop-blur">NOVA</span><button onclick="addToCart(${p.id})" class="absolute bottom-3 right-3 translate-y-1 rounded-full bg-stone-900 px-4 py-2.5 text-sm font-bold text-white opacity-0 shadow-lg transition group-hover:translate-y-0 group-hover:opacity-100 hover:bg-orange-500">+ Add</button></div><div class="p-5"><div class="flex items-start justify-between gap-3"><div><h3 class="font-black">${p.name}</h3><p class="mt-1 text-xs capitalize text-stone-500">${p.category}</p></div><span class="font-bold">${money(p.price)}</span></div></div></article>`).join('');
-    }
-    function addToCart(id) { cart.push(id); saveCart(); openCart(); }
-    function removeFromCart(index) { cart.splice(index, 1); saveCart(); }
-    function saveCart() { localStorage.setItem('nova-cart', JSON.stringify(cart)); updateCart(); }
-    function updateCart() {
-      document.getElementById('cartCount').textContent = cart.length;
-      document.getElementById('cartCount').classList.toggle('hidden', !cart.length);
-      const items = cart.map((id, i) => ({...products.find(p => p.id === id), i}));
-      document.getElementById('cartItems').innerHTML = items.length ? items.map(p => `<div class="flex items-center gap-3 rounded-2xl bg-stone-50 p-3"><img src="${p.image}" alt="${p.name}" class="h-16 w-16 rounded-xl object-cover"><div class="flex-1"><p class="font-bold">${p.name}</p><p class="text-sm text-stone-500">${money(p.price)}</p></div><button onclick="removeFromCart(${p.i})" class="text-xs font-semibold text-stone-400 transition hover:text-red-500">Remove</button></div>`).join('') : '<div class="rounded-2xl border border-dashed border-stone-300 p-8 text-center"><p class="font-bold">Your cart is empty.</p><p class="mt-1 text-sm text-stone-500">Add something you love.</p></div>';
-      document.getElementById('cartTotal').textContent = money(items.reduce((sum, p) => sum + p.price, 0));
-    }
-    function openCart() { document.getElementById('cartPanel').classList.remove('hidden'); document.getElementById('cartPanel').classList.add('cart-enter'); document.getElementById('overlay').classList.remove('hidden'); document.body.classList.add('overflow-hidden'); }
-    function closeCart() { document.getElementById('cartPanel').classList.add('hidden'); document.getElementById('cartPanel').classList.remove('cart-enter'); document.getElementById('overlay').classList.add('hidden'); document.body.classList.remove('overflow-hidden'); }
-
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const menuIcon = document.getElementById('menuIcon');
-    function closeMobileMenu() {
-      mobileMenu.classList.add('hidden');
-      mobileMenu.classList.remove('mobile-menu-enter');
-      menuBtn.setAttribute('aria-expanded', 'false');
-      menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />';
-    }
-    function toggleMobileMenu() {
-      const isOpen = !mobileMenu.classList.contains('hidden');
-      if (isOpen) { closeMobileMenu(); return; }
-      mobileMenu.classList.remove('hidden');
-      mobileMenu.classList.add('mobile-menu-enter');
-      menuBtn.setAttribute('aria-expanded', 'true');
-      menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />';
-    }
-    menuBtn.addEventListener('click', toggleMobileMenu);
-    document.querySelectorAll('.mobile-link').forEach(link => link.addEventListener('click', closeMobileMenu));
-
-    document.querySelectorAll('.filter').forEach(btn => btn.addEventListener('click', () => { document.querySelectorAll('.filter').forEach(b => b.className='filter rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-bold transition hover:border-stone-900'); btn.className='filter rounded-full bg-stone-900 px-4 py-2 text-sm font-bold text-white transition'; renderProducts(btn.dataset.filter); }));
-    document.getElementById('cartBtn').onclick = openCart;
-    document.getElementById('closeCart').onclick = closeCart;
-    document.getElementById('overlay').onclick = closeCart;
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeCart(); closeMobileMenu(); } });
-    window.addEventListener('resize', () => { if (window.innerWidth >= 768) closeMobileMenu(); });
-    renderProducts(); updateCart();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
