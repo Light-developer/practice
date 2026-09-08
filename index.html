@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova — Modern essentials</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] } } } };
+  </script>
+</head>
+<body class="bg-stone-50 text-stone-900 antialiased">
+  <header class="sticky top-0 z-40 border-b border-stone-200 bg-stone-50/95 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+      <a href="#" class="text-xl font-black tracking-tight">NOVA<span class="text-orange-500">.</span></a>
+      <nav class="hidden gap-8 text-sm font-medium md:flex">
+        <a href="#shop" class="hover:text-orange-500">Shop</a>
+        <a href="#about" class="hover:text-orange-500">About</a>
+        <a href="#contact" class="hover:text-orange-500">Contact</a>
+      </nav>
+      <button id="cartBtn" class="relative rounded-full border border-stone-300 p-2.5 hover:bg-white" aria-label="Open cart">
+        🛒 <span id="cartCount" class="absolute -right-1 -top-1 hidden min-w-5 rounded-full bg-orange-500 px-1 text-center text-xs font-bold text-white">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="mx-auto grid max-w-7xl items-center gap-10 px-5 py-14 lg:grid-cols-2 lg:px-8 lg:py-24">
+      <div>
+        <p class="mb-4 text-sm font-bold uppercase tracking-[0.25em] text-orange-500">New season / 2026</p>
+        <h1 class="max-w-xl text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">Simple things. <span class="text-orange-500">Better made.</span></h1>
+        <p class="mt-6 max-w-lg text-lg leading-8 text-stone-600">Thoughtful everyday pieces designed for comfort, function, and a little more joy.</p>
+        <a href="#shop" class="mt-8 inline-flex rounded-full bg-stone-900 px-7 py-3.5 font-semibold text-white transition hover:bg-orange-500">Shop the collection →</a>
+      </div>
+      <div class="overflow-hidden rounded-[2rem] bg-stone-200 shadow-sm">
+        <img class="h-[460px] w-full object-cover" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1000&q=85" alt="Minimal wristwatch" />
+      </div>
+    </section>
+
+    <section id="shop" class="mx-auto max-w-7xl px-5 pb-20 lg:px-8">
+      <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div><p class="text-sm font-bold uppercase tracking-widest text-orange-500">Featured</p><h2 class="mt-2 text-3xl font-black">Shop favorites</h2></div>
+        <div class="flex gap-2" id="filters">
+          <button data-filter="all" class="filter rounded-full bg-stone-900 px-4 py-2 text-sm font-semibold text-white">All</button>
+          <button data-filter="accessories" class="filter rounded-full border border-stone-300 px-4 py-2 text-sm font-semibold">Accessories</button>
+          <button data-filter="home" class="filter rounded-full border border-stone-300 px-4 py-2 text-sm font-semibold">Home</button>
+        </div>
+      </div>
+      <div id="products" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"></div>
+    </section>
+
+    <section id="about" class="border-y border-stone-200 bg-white">
+      <div class="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:grid-cols-3 lg:px-8">
+        <div><div class="mb-3 text-2xl">✦</div><h3 class="font-bold">Made to last</h3><p class="mt-2 text-sm leading-6 text-stone-600">Durable materials and timeless designs over disposable trends.</p></div>
+        <div><div class="mb-3 text-2xl">↗</div><h3 class="font-bold">Free delivery</h3><p class="mt-2 text-sm leading-6 text-stone-600">Free standard shipping on orders over $100.</p></div>
+        <div><div class="mb-3 text-2xl">♡</div><h3 class="font-bold">Easy returns</h3><p class="mt-2 text-sm leading-6 text-stone-600">Changed your mind? Return your order within 30 days.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact" class="bg-stone-900 text-stone-300">
+    <div class="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-10 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+      <div><p class="font-black text-white">NOVA<span class="text-orange-500">.</span></p><p class="mt-1 text-sm">Everyday essentials, thoughtfully designed.</p></div>
+      <p class="text-sm">© 2026 Nova Studio</p>
+    </div>
+  </footer>
+
+  <div id="cartPanel" class="fixed inset-y-0 right-0 z-50 hidden w-full max-w-md border-l border-stone-200 bg-white p-6 shadow-2xl">
+    <div class="flex items-center justify-between"><h2 class="text-2xl font-black">Your cart</h2><button id="closeCart" class="text-2xl" aria-label="Close cart">×</button></div>
+    <div id="cartItems" class="mt-8 space-y-4"></div>
+    <div class="absolute bottom-0 left-0 right-0 border-t border-stone-200 bg-white p-6"><div class="flex justify-between font-bold"><span>Total</span><span id="cartTotal">$0.00</span></div><button class="mt-4 w-full rounded-full bg-stone-900 py-3.5 font-bold text-white hover:bg-orange-500" onclick="alert('Demo checkout — connect your payment provider here.')">Checkout</button></div>
+  </div>
+  <div id="overlay" class="fixed inset-0 z-40 hidden bg-black/30"></div>
+
+  <script>
+    const products = [
+      { id: 1, name: 'Arc Watch', price: 129, category: 'accessories', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80' },
+      { id: 2, name: 'Canvas Tote', price: 48, category: 'accessories', image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=700&q=80' },
+      { id: 3, name: 'Ceramic Set', price: 64, category: 'home', image: 'https://images.unsplash.com/photo-1493106819501-66d381c466f1?auto=format&fit=crop&w=700&q=80' },
+      { id: 4, name: 'Daily Lamp', price: 89, category: 'home', image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=80' },
+      { id: 5, name: 'Field Bottle', price: 35, category: 'accessories', image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=700&q=80' },
+      { id: 6, name: 'Soft Throw', price: 72, category: 'home', image: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=700&q=80' },
+      { id: 7, name: 'Desk Tray', price: 42, category: 'home', image: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=700&q=80' },
+      { id: 8, name: 'Leather Wallet', price: 58, category: 'accessories', image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=700&q=80' }
+    ];
+    let cart = JSON.parse(localStorage.getItem('nova-cart') || '[]');
+    const money = n => `$${n.toFixed(2)}`;
+    function renderProducts(filter = 'all') {
+      document.getElementById('products').innerHTML = products.filter(p => filter === 'all' || p.category === filter).map(p => `
+        <article class="group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-stone-200">
+          <div class="relative overflow-hidden bg-stone-100"><img src="${p.image}" alt="${p.name}" class="h-64 w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy"><button onclick="addToCart(${p.id})" class="absolute bottom-3 right-3 rounded-full bg-white px-4 py-2 text-sm font-bold shadow hover:bg-orange-500 hover:text-white">+ Add</button></div>
+          <div class="p-4"><div class="flex justify-between gap-3"><h3 class="font-bold">${p.name}</h3><span class="font-semibold">${money(p.price)}</span></div><p class="mt-1 text-xs capitalize text-stone-500">${p.category}</p></div>
+        </article>`).join('');
+    }
+    function addToCart(id) { cart.push(id); saveCart(); openCart(); }
+    function removeFromCart(index) { cart.splice(index, 1); saveCart(); }
+    function saveCart() { localStorage.setItem('nova-cart', JSON.stringify(cart)); updateCart(); }
+    function updateCart() {
+      document.getElementById('cartCount').textContent = cart.length;
+      document.getElementById('cartCount').classList.toggle('hidden', !cart.length);
+      const items = cart.map((id, i) => ({...products.find(p => p.id === id), i}));
+      document.getElementById('cartItems').innerHTML = items.length ? items.map(p => `<div class="flex items-center gap-3 rounded-xl bg-stone-50 p-3"><img src="${p.image}" class="h-16 w-16 rounded-lg object-cover"><div class="flex-1"><p class="font-semibold">${p.name}</p><p class="text-sm text-stone-500">${money(p.price)}</p></div><button onclick="removeFromCart(${p.i})" class="text-sm text-stone-400 hover:text-red-500">Remove</button></div>`).join('') : '<p class="text-stone-500">Your cart is empty.</p>';
+      document.getElementById('cartTotal').textContent = money(items.reduce((sum, p) => sum + p.price, 0));
+    }
+    function openCart() { document.getElementById('cartPanel').classList.remove('hidden'); document.getElementById('overlay').classList.remove('hidden'); }
+    function closeCart() { document.getElementById('cartPanel').classList.add('hidden'); document.getElementById('overlay').classList.add('hidden'); }
+    document.querySelectorAll('.filter').forEach(btn => btn.addEventListener('click', () => { document.querySelectorAll('.filter').forEach(b => b.className='filter rounded-full border border-stone-300 px-4 py-2 text-sm font-semibold'); btn.className='filter rounded-full bg-stone-900 px-4 py-2 text-sm font-semibold text-white'; renderProducts(btn.dataset.filter); }));
+    document.getElementById('cartBtn').onclick = openCart; document.getElementById('closeCart').onclick = closeCart; document.getElementById('overlay').onclick = closeCart;
+    renderProducts(); updateCart();
+  </script>
+</body>
+</html>
