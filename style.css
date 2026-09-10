@@ -1,61 +1,96 @@
 @import url('style-core.css');
 
-/* SOLEA mobile edge spacing — keeps every page breathable on small screens */
+/* SOLEA responsive edge spacing + full-screen mobile navigation */
 @media (max-width: 900px) {
-  .container {
-    width: min(100% - 40px, 1240px);
-    max-width: none;
-  }
-
-  .hero-content {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .hero-meta {
-    width: calc(100% - 40px);
-  }
-
+  .container,
+  .hero-content,
+  .hero-meta,
   .section > .container,
   .page-hero > .container,
   .cart-layout,
   .checkout-layout,
-  .product-detail {
-    width: min(100% - 40px, 1240px);
+  .product-detail,
+  .footer-grid,
+  .footer-bottom {
+    width: calc(100% - 40px) !important;
+    max-width: none;
     margin-left: auto;
     margin-right: auto;
   }
 
-  .shop-toolbar,
-  .shop-toolbar > * {
-    max-width: 100%;
+  .hero-content { padding-left: 0; padding-right: 0; }
+  .hero-meta { left: 50%; }
+  .brand-copy { padding-left: 20px; padding-right: 20px; }
+
+  /* Full-width mobile menu sliding in from the right */
+  .mobile-nav {
+    position: fixed;
+    top: 100px;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: calc(100vh - 100px);
+    padding: 30px 20px 40px;
+    background: var(--paper);
+    z-index: 49;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow-y: auto;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform .5s cubic-bezier(.77,0,.175,1), visibility .5s;
+    box-shadow: -12px 0 40px rgba(0,0,0,.08);
   }
+
+  .mobile-nav.open {
+    display: flex;
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .mobile-nav a {
+    width: 100%;
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: .14em;
+  }
+
+  .mobile-nav a:last-child { border-bottom: 1px solid var(--line); }
+  body:has(.mobile-nav.open) { overflow: hidden; }
 }
 
 @media (max-width: 560px) {
-  .container {
-    width: calc(100% - 40px);
-  }
-
-  .hero-content {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .brand-copy {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .footer {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
+  .container,
+  .hero-content,
+  .hero-meta,
+  .section > .container,
+  .page-hero > .container,
+  .cart-layout,
+  .checkout-layout,
+  .product-detail,
   .footer-grid,
   .footer-bottom {
-    width: calc(100% - 40px);
-    margin-left: auto;
-    margin-right: auto;
+    width: calc(100% - 40px) !important;
   }
+
+  .hero-content { padding-left: 0; padding-right: 0; }
+  .hero-meta { width: calc(100% - 40px) !important; }
+  .brand-copy { padding-left: 20px; padding-right: 20px; }
+  .footer { padding-left: 0; padding-right: 0; }
+
+  .mobile-nav {
+    top: 100px;
+    height: calc(100vh - 100px);
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav { transition: none; }
 }
