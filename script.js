@@ -1,256 +1,34 @@
-const products = [
-  {
-    id: 1,
-    name: 'Arc Watch',
-    price: 129,
-    category: 'accessories',
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80'
-  },
-  {
-    id: 2,
-    name: 'Canvas Tote',
-    price: 48,
-    category: 'accessories',
-    image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=700&q=80'
-  },
-  {
-    id: 3,
-    name: 'Ceramic Set',
-    price: 64,
-    category: 'home',
-    image: 'https://images.unsplash.com/photo-1493106819501-66d381c466f1?auto=format&fit=crop&w=700&q=80'
-  },
-  {
-    id: 4,
-    name: 'Daily Lamp',
-    price: 89,
-    category: 'home',
-    image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=80'
-  },
-  {
-    id: 5,
-    name: 'Field Bottle',
-    price: 35,
-    category: 'accessories',
-    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=700&q=80'
-  },
-  {
-    id: 6,
-    name: 'Soft Throw',
-    price: 72,
-    category: 'home',
-    image: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=700&q=80'
-  },
-  {
-    id: 7,
-    name: 'Desk Tray',
-    price: 42,
-    category: 'home',
-    image: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=700&q=80'
-  },
-  {
-    id: 8,
-    name: 'Leather Wallet',
-    price: 58,
-    category: 'accessories',
-    image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=700&q=80'
-  }
+const products=[
+{id:1,name:'Forum Low',brand:'Axel Arigato',category:'Sneakers',price:285,image:'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=900&q=90',badge:'Bestseller'},
+{id:2,name:'Cloud 5',brand:'On',category:'Performance',price:160,image:'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=900&q=90',badge:'New'},
+{id:3,name:'Campo',brand:'Veja',category:'Sneakers',price:175,image:'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=900&q=90',badge:''},
+{id:4,name:'Original Achilles',brand:'Common Projects',category:'Luxury',price:495,image:'https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=900&q=90',badge:'Icon'},
+{id:5,name:'Clean 90',brand:'Axel Arigato',category:'Sneakers',price:295,image:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=90',badge:''},
+{id:6,name:'990v6',brand:'New Balance',category:'Performance',price:210,image:'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=900&q=90',badge:'New'},
+{id:7,name:'Esplar',brand:'Veja',category:'Sneakers',price:145,image:'https://images.unsplash.com/photo-1595341888016-a392ef81b7de?auto=format&fit=crop&w=900&q=90',badge:''},
+{id:8,name:'Super-Star',brand:'Golden Goose',category:'Luxury',price:620,image:'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=900&q=90',badge:'Limited'},
+{id:9,name:'Tatum 1',brand:'Jordan',category:'Performance',price:145,image:'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=90',badge:''},
+{id:10,name:'Bradley Woven',brand:'Norda',category:'Performance',price:220,image:'https://images.unsplash.com/photo-1554130846-a1be9f6e7a80?auto=format&fit=crop&w=900&q=90',badge:'Limited'},
+{id:11,name:'Retro Runner',brand:'Autry',category:'Sneakers',price:190,image:'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=900&q=90',badge:''},
+{id:12,name:'Chelsea Boot',brand:'Aeyde',category:'Luxury',price:430,image:'https://images.unsplash.com/photo-1638247025967-b4e38f787b76?auto=format&fit=crop&w=900&q=90',badge:'New'}
 ];
-
-let cart = JSON.parse(localStorage.getItem('nova-cart') || '[]');
-
-const money = (amount) => `$${amount.toFixed(2)}`;
-
-function renderProducts(filter = 'all') {
-  const productContainer = document.getElementById('products');
-  const filteredProducts = products.filter(
-    (product) => filter === 'all' || product.category === filter
-  );
-
-  productContainer.innerHTML = filteredProducts
-    .map(
-      (product) => `
-        <article class="product-card group overflow-hidden rounded-2xl bg-white ring-1 ring-stone-200">
-          <div class="relative overflow-hidden bg-stone-100">
-            <img
-              src="${product.image}"
-              alt="${product.name}"
-              class="product-image h-72 w-full object-cover"
-              loading="lazy"
-            >
-            <span class="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-black uppercase tracking-wider backdrop-blur">
-              NOVA
-            </span>
-            <button
-              onclick="addToCart(${product.id})"
-              class="absolute bottom-3 right-3 translate-y-1 rounded-full bg-stone-900 px-4 py-2.5 text-sm font-bold text-white opacity-0 shadow-lg transition group-hover:translate-y-0 group-hover:opacity-100 hover:bg-orange-500"
-            >
-              + Add
-            </button>
-          </div>
-          <div class="p-5">
-            <div class="flex items-start justify-between gap-3">
-              <div>
-                <h3 class="font-black">${product.name}</h3>
-                <p class="mt-1 text-xs capitalize text-stone-500">${product.category}</p>
-              </div>
-              <span class="font-bold">${money(product.price)}</span>
-            </div>
-          </div>
-        </article>
-      `
-    )
-    .join('');
-}
-
-function addToCart(id) {
-  cart.push(id);
-  saveCart();
-  openCart();
-}
-
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  saveCart();
-}
-
-function saveCart() {
-  localStorage.setItem('nova-cart', JSON.stringify(cart));
-  updateCart();
-}
-
-function updateCart() {
-  const cartCount = document.getElementById('cartCount');
-  const cartItems = document.getElementById('cartItems');
-  const cartTotal = document.getElementById('cartTotal');
-
-  cartCount.textContent = cart.length;
-  cartCount.classList.toggle('hidden', !cart.length);
-
-  const items = cart
-    .map((id, index) => ({ ...products.find((product) => product.id === id), index }))
-    .filter((product) => product.id);
-
-  if (!items.length) {
-    cartItems.innerHTML = `
-      <div class="rounded-2xl border border-dashed border-stone-300 p-8 text-center">
-        <p class="font-bold">Your cart is empty.</p>
-        <p class="mt-1 text-sm text-stone-500">Add something you love.</p>
-      </div>
-    `;
-  } else {
-    cartItems.innerHTML = items
-      .map(
-        (product) => `
-          <div class="flex items-center gap-3 rounded-2xl bg-stone-50 p-3">
-            <img src="${product.image}" alt="${product.name}" class="h-16 w-16 rounded-xl object-cover">
-            <div class="flex-1">
-              <p class="font-bold">${product.name}</p>
-              <p class="text-sm text-stone-500">${money(product.price)}</p>
-            </div>
-            <button
-              onclick="removeFromCart(${product.index})"
-              class="text-xs font-semibold text-stone-400 transition hover:text-red-500"
-            >
-              Remove
-            </button>
-          </div>
-        `
-      )
-      .join('');
-  }
-
-  const total = items.reduce((sum, product) => sum + product.price, 0);
-  cartTotal.textContent = money(total);
-}
-
-function openCart() {
-  const cartPanel = document.getElementById('cartPanel');
-  const overlay = document.getElementById('overlay');
-
-  cartPanel.classList.remove('hidden');
-  cartPanel.classList.add('cart-enter');
-  overlay.classList.remove('hidden');
-  document.body.classList.add('overflow-hidden');
-}
-
-function closeCart() {
-  const cartPanel = document.getElementById('cartPanel');
-  const overlay = document.getElementById('overlay');
-
-  cartPanel.classList.add('hidden');
-  cartPanel.classList.remove('cart-enter');
-  overlay.classList.add('hidden');
-  document.body.classList.remove('overflow-hidden');
-}
-
-function closeMobileMenu() {
-  const mobileMenu = document.getElementById('mobileMenu');
-  const menuBtn = document.getElementById('menuBtn');
-  const menuIcon = document.getElementById('menuIcon');
-
-  mobileMenu.classList.add('hidden');
-  mobileMenu.classList.remove('mobile-menu-enter');
-  menuBtn.setAttribute('aria-expanded', 'false');
-  menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />';
-}
-
-function toggleMobileMenu() {
-  const mobileMenu = document.getElementById('mobileMenu');
-  const menuBtn = document.getElementById('menuBtn');
-  const menuIcon = document.getElementById('menuIcon');
-  const isOpen = !mobileMenu.classList.contains('hidden');
-
-  if (isOpen) {
-    closeMobileMenu();
-    return;
-  }
-
-  mobileMenu.classList.remove('hidden');
-  mobileMenu.classList.add('mobile-menu-enter');
-  menuBtn.setAttribute('aria-expanded', 'true');
-  menuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />';
-}
-
-document.getElementById('cartBtn').addEventListener('click', openCart);
-document.getElementById('closeCart').addEventListener('click', closeCart);
-document.getElementById('overlay').addEventListener('click', closeCart);
-document.getElementById('menuBtn').addEventListener('click', toggleMobileMenu);
-
-document.querySelectorAll('.mobile-link').forEach((link) => {
-  link.addEventListener('click', closeMobileMenu);
-});
-
-document.querySelectorAll('.filter').forEach((button) => {
-  button.addEventListener('click', () => {
-    document.querySelectorAll('.filter').forEach((filterButton) => {
-      filterButton.classList.remove('bg-stone-900', 'text-white');
-      filterButton.classList.add('border', 'border-stone-300', 'bg-white');
-    });
-
-    button.classList.remove('border', 'border-stone-300', 'bg-white');
-    button.classList.add('bg-stone-900', 'text-white');
-
-    renderProducts(button.dataset.filter);
-  });
-});
-
-document.getElementById('checkoutBtn').addEventListener('click', () => {
-  alert('Demo checkout — connect your payment provider here.');
-});
-
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
-    closeCart();
-    closeMobileMenu();
-  }
-});
-
-window.addEventListener('resize', () => {
-  if (window.innerWidth >= 768) {
-    closeMobileMenu();
-  }
-});
-
-renderProducts();
-updateCart();
+const brands=[{name:'Axel Arigato',desc:'Scandinavian minimalism with a cult following.',image:'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=900&q=85'},{name:'Common Projects',desc:'Italian craftsmanship, stripped back to its essentials.',image:'https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=900&q=85'},{name:'Veja',desc:'Responsible materials and effortless Parisian style.',image:'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=900&q=85'},{name:'Golden Goose',desc:'Hand-finished Italian sneakers with unmistakable character.',image:'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=900&q=85'},{name:'On',desc:'Swiss engineering made visible in every stride.',image:'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=900&q=85'},{name:'New Balance',desc:'Heritage performance, redesigned for modern life.',image:'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=900&q=85'}];
+const money=n=>`$${n.toFixed(2)}`;
+function getCart(){return JSON.parse(localStorage.getItem('solea-cart')||'[]')}
+function saveCart(cart){localStorage.setItem('solea-cart',JSON.stringify(cart));updateCartCount()}
+function updateCartCount(){const count=getCart().reduce((s,i)=>s+i.qty,0);document.querySelectorAll('.cart-count').forEach(el=>el.textContent=count)}
+function addToCart(id){const cart=getCart(),item=cart.find(i=>i.id===id);if(item)item.qty++;else cart.push({id,qty:1});saveCart(cart);toast('Added to your bag');}
+function removeFromCart(id){saveCart(getCart().filter(i=>i.id!==id));renderCart()}
+function changeQty(id,delta){const cart=getCart(),item=cart.find(i=>i.id===id);if(!item)return;item.qty+=delta;if(item.qty<=0)return removeFromCart(id);saveCart(cart);renderCart()}
+function productCard(p){return `<article class="product-card reveal"><a href="product.html?id=${p.id}"><div class="product-media"><img class="product-image" src="${p.image}" alt="${p.name} by ${p.brand}" loading="lazy">${p.badge?`<span class="product-badge">${p.badge}</span>`:''}<button class="heart" onclick="event.preventDefault();toast('Saved to wishlist')">♡</button></div><div class="product-info"><div><h3>${p.name}</h3><p>${p.brand} · ${p.category}</p></div><span class="product-price">${money(p.price)}</span></div></a></article>`}
+function renderProducts(list,containerId='products'){const el=document.getElementById(containerId);if(!el)return;el.innerHTML=list.map(productCard).join('');observeReveals()}
+function renderFeatured(){renderProducts(products.slice(0,4),'featuredProducts')}
+function renderShop(){const grid=document.getElementById('shopProducts');if(!grid)return;const params=new URLSearchParams(location.search),brand=params.get('brand')||'all';const search=document.getElementById('searchInput'),category=document.getElementById('categoryFilter'),brandFilter=document.getElementById('brandFilter'),sort=document.getElementById('sortFilter');if(brandFilter)brandFilter.value=brand;const apply=()=>{let list=[...products],q=(search?.value||'').toLowerCase().trim(),cat=category?.value||'all',br=brandFilter?.value||'all';if(q)list=list.filter(p=>`${p.name} ${p.brand} ${p.category}`.toLowerCase().includes(q));if(cat!=='all')list=list.filter(p=>p.category===cat);if(br!=='all')list=list.filter(p=>p.brand===br);if(sort?.value==='low')list.sort((a,b)=>a.price-b.price);if(sort?.value==='high')list.sort((a,b)=>b.price-a.price);if(sort?.value==='new')list.reverse();grid.innerHTML=list.map(productCard).join('');const result=document.getElementById('resultCount');if(result)result.textContent=`${list.length} ${list.length===1?'pair':'pairs'}`;observeReveals()};[search,category,brandFilter,sort].forEach(el=>el?.addEventListener(el===search?'input':'change',apply));apply()}
+function renderBrands(){const el=document.getElementById('brandGrid');if(!el)return;el.innerHTML=brands.map((b,i)=>`<a class="brand-tile reveal" href="shop.html?brand=${encodeURIComponent(b.name)}"><img src="${b.image}" alt="${b.name}"><div><p class="eyebrow light">${String(i+1).padStart(2,'0')}</p><h3>${b.name}</h3><p>${b.desc}</p><span>Explore house ↗</span></div></a>`).join('');observeReveals()}
+function renderProduct(){const el=document.getElementById('productDetail');if(!el)return;const p=products.find(x=>x.id===Number(new URLSearchParams(location.search).get('id'))) || products[0];el.innerHTML=`<div class="detail-media"><img src="${p.image}" alt="${p.name} by ${p.brand}"></div><div class="detail-copy"><p class="eyebrow">${p.brand}</p><h1>${p.name}</h1><p class="detail-price">${money(p.price)}</p><p class="detail-description">A considered silhouette from ${p.brand}, selected for the SOLEA edit. Designed to move effortlessly between everyday uniform and after-hours moments.</p><div class="size-label">Select size <span>Size guide</span></div><div class="size-grid">${['40','41','42','43','44','45'].map(s=>`<button class="size-btn">${s}</button>`).join('')}</div><button class="btn btn-dark add-detail" data-id="${p.id}">Add to bag <span>+</span></button><div class="accordions"><details open><summary>Details</summary><p>Premium construction · Curated by SOLEA · Authenticity guaranteed.</p></details><details><summary>Delivery & returns</summary><p>Complimentary delivery over $150. Easy returns within 30 days.</p></details><details><summary>The maker</summary><p>${p.brand} is one of the independent houses shaping modern footwear.</p></details></div></div>`;document.querySelectorAll('.size-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.size-btn').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')}));el.querySelector('.add-detail').addEventListener('click',()=>addToCart(p.id))}
+function renderCart(){const el=document.getElementById('cartLines'),summary=document.getElementById('cartSummary');if(!el)return;const cart=getCart();const items=cart.map(i=>({...products.find(p=>p.id===i.id),qty:i.qty})).filter(i=>i.id);if(!items.length){el.innerHTML='<div class="empty-state"><span>✦</span><h2>Your bag is quiet.</h2><p>Fill it with something worth walking in.</p><a class="btn btn-dark" href="shop.html">Explore shoes ↗</a></div>';if(summary)summary.innerHTML='';return}el.innerHTML=items.map(p=>`<div class="cart-line"><img src="${p.image}" alt="${p.name}"><div class="cart-line-info"><p class="eyebrow">${p.brand}</p><h3>${p.name}</h3><span>${money(p.price)}</span><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><b>${p.qty}</b><button onclick="changeQty(${p.id},1)">+</button></div></div><div class="cart-line-end"><strong>${money(p.price*p.qty)}</strong><button onclick="removeFromCart(${p.id})">Remove</button></div></div>`).join('');const subtotal=items.reduce((s,p)=>s+p.price*p.qty,0),shipping=subtotal>=150?0:18,total=subtotal+shipping;summary.innerHTML=`<div><span>Subtotal</span><b>${money(subtotal)}</b></div><div><span>Delivery</span><b>${shipping?'$18.00':'Complimentary'}</b></div><div class="grand"><span>Total</span><b>${money(total)}</b></div><button id="checkoutButton" class="btn btn-dark checkout-btn">Secure checkout <span>↗</span></button>`;document.getElementById('checkoutButton').addEventListener('click',()=>{if(!getCart().length)return;location.href='checkout.html'})}
+function renderCheckout(){const el=document.getElementById('checkoutItems');if(!el)return;const cart=getCart();const items=cart.map(i=>({...products.find(p=>p.id===i.id),qty:i.qty})).filter(i=>i.id);if(!items.length){location.href='shop.html';return}el.innerHTML=items.map(p=>`<div class="checkout-item"><span>${p.name} × ${p.qty}</span><b>${money(p.price*p.qty)}</b></div>`).join('');const sub=items.reduce((s,p)=>s+p.price*p.qty,0),ship=sub>=150?0:18;document.getElementById('checkoutTotal').textContent=money(sub+ship);document.getElementById('checkoutForm').addEventListener('submit',e=>{e.preventDefault();localStorage.removeItem('solea-cart');updateCartCount();document.getElementById('checkoutSuccess').classList.add('show')})}
+function toast(msg){const el=document.getElementById('toast');if(!el)return;el.textContent=msg;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
+function observeReveals(){const els=document.querySelectorAll('.reveal:not(.observed)');if(!('IntersectionObserver' in window)){els.forEach(e=>e.classList.add('is-visible'));return}const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-visible');observer.unobserve(e.target)}}),{threshold:.12});els.forEach(e=>{e.classList.add('observed');observer.observe(e)})}
+function initNav(){const btn=document.getElementById('menuBtn'),nav=document.getElementById('mobileNav');btn?.addEventListener('click',()=>{nav.classList.toggle('open');btn.textContent=nav.classList.contains('open')?'×':'☰'});window.addEventListener('scroll',()=>document.getElementById('siteHeader')?.classList.toggle('scrolled',scrollY>20))}
+document.addEventListener('DOMContentLoaded',()=>{updateCartCount();initNav();renderFeatured();renderShop();renderBrands();renderProduct();renderCart();renderCheckout();observeReveals();document.getElementById('newsletterForm')?.addEventListener('submit',e=>{e.preventDefault();toast('Welcome to the SOLEA list')})});
