@@ -2,6 +2,10 @@
 
 /* SOLEA responsive edge spacing + full-screen mobile navigation */
 @media (max-width: 900px) {
+  .announcement {
+    display: none;
+  }
+
   .container,
   .hero-content,
   .hero-meta,
