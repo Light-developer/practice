@@ -8,6 +8,7 @@ import crypto from 'node:crypto';
 import { rateLimit } from 'express-rate-limit';
 import { query, pool } from './db.js';
 import { initializeTransaction, verifyTransaction, verifyWebhookSignature } from './paystack.js';
+import vendorRoutes from './vendor-routes.js';
 import 'dotenv/config';
 
 const app = express();
@@ -70,11 +71,11 @@ app.post('/api/payments/paystack/webhook', express.raw({ type: 'application/json
     if (event.event !== 'charge.success') return;
     const payment = event.data;
     const reference = payment.reference;
-    const result = await query('SELECT id, total_kobo, status FROM orders WHERE payment_reference = $1 FOR UPDATE', [reference]);
+    const result = await query('SELECT id, total_kobo, status FROM orders WHERE payment_reference = $1', [reference]);
     const order = result.rows[0];
     if (!order || order.status === 'paid') return;
     if (Number(payment.amount) !== Number(order.total_kobo) || payment.status !== 'success') return;
-    await query("UPDATE orders SET status = 'paid', paid_at = NOW(), updated_at = NOW() WHERE id = $1", [order.id]);
+    await query("UPDATE orders SET status = 'paid', paid_at = NOW(), updated_at = NOW() WHERE id = $1 AND status <> 'paid'", [order.id]);
   } catch (error) {
     console.error('Paystack webhook processing failed:', error);
   }
@@ -134,6 +135,8 @@ app.get('/api/auth/me', authRequired, async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
+app.use('/api/vendors', vendorRoutes);
+
 app.get('/api/products', async (req, res, next) => {
   try {
     const values = [];
@@ -185,7 +188,7 @@ app.post('/api/orders/initialize-payment', paymentLimiter, async (req, res, next
     const total = subtotal + shipping;
     const orderNumber = generateOrderNumber();
     const reference = `SOLEA-${crypto.randomBytes(10).toString('hex')}`;
-    const order = await client.query(`INSERT INTO orders (order_number, email, full_name, delivery_address, subtotal_kobo, shipping_kobo, total_kobo, currency, payment_reference) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id, order_number, total_kobo, currency, payment_reference`, [orderNumber, email.trim().toLowerCase(), fullName.trim(), deliveryAddress.trim(), subtotal, shipping, total, process.env.PAYSTACK_CURRENCY || 'NGN', reference]);
+    const order = await client.query(`INSERT INTO orders (order_number, user_id, email, full_name, delivery_address, subtotal_kobo, shipping_kobo, total_kobo, currency, payment_reference) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id, order_number, total_kobo, currency, payment_reference`, [orderNumber, req.user?.sub || null, email.trim().toLowerCase(), fullName.trim(), deliveryAddress.trim(), subtotal, shipping, total, process.env.PAYSTACK_CURRENCY || 'NGN', reference]);
 
     for (const item of orderItems) {
       await client.query(`INSERT INTO order_items (order_id, product_id, vendor_id, product_name, brand, unit_price_kobo, quantity, line_total_kobo) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`, [order.rows[0].id, item.product.id, item.product.vendor_id, item.product.name, item.product.brand, item.product.price_kobo, item.quantity, item.lineTotal]);
