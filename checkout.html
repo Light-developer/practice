@@ -1,1 +1,65 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Checkout — SOLEA</title><link rel="stylesheet" href="style.css"></head><body><div class="announcement">Secure checkout · Your details are protected</div><header class="site-header"><div class="container nav-wrap"><a class="logo" href="index.html">SOLEA<span>®</span></a><a class="text-link" href="cart.html">← Back to bag</a></div></header><main><section class="container checkout-layout"><div><p class="eyebrow">CHECKOUT</p><h1>Complete<br>your order.</h1><form class="checkout-form" id="checkoutForm"><label>Full name<input required type="text" placeholder="Your name"></label><label>Email address<input required type="email" placeholder="you@example.com"></label><label>Delivery address<input required type="text" placeholder="Street and city"></label><label>Card number<input required inputmode="numeric" placeholder="4242 4242 4242 4242"></label><button class="btn btn-dark" type="submit">Place demo order <span>↗</span></button></form><div class="success" id="checkoutSuccess"><h2>Order received.</h2><p>This is a functional demo checkout. Connect your payment provider before accepting real payments.</p><a class="btn btn-dark" href="index.html">Return home ↗</a></div></div><aside class="checkout-summary"><p class="eyebrow">ORDER SUMMARY</p><div id="checkoutItems"></div><div class="checkout-total"><span>Total</span><b id="checkoutTotal">$0.00</b></div></aside></section></main><footer class="footer"><div class="container footer-bottom" style="margin-top:0"><span>© 2026 SOLEA Marketplace</span><span>Demo checkout</span></div></footer><script src="script.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Secure checkout for your SOLEA footwear order.">
+  <title>Secure Checkout — SOLEA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="announcement">Secure checkout · Payments securely processed by Paystack</div>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="logo" href="index.html">SOLEA<span>®</span></a>
+      <a class="text-link" href="cart.html">← Back to bag</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="container checkout-layout">
+      <div>
+        <p class="eyebrow">SECURE CHECKOUT</p>
+        <h1>Complete<br>your order.</h1>
+        <form class="checkout-form" id="checkoutForm" novalidate>
+          <label>Full name
+            <input name="fullName" required autocomplete="name" type="text" placeholder="Your name">
+          </label>
+          <label>Email address
+            <input name="email" required autocomplete="email" type="email" placeholder="you@example.com">
+          </label>
+          <label>Delivery address
+            <input name="deliveryAddress" required autocomplete="street-address" type="text" placeholder="Street, city and country">
+          </label>
+          <p style="color:var(--muted);font-size:12px;line-height:1.7;margin:0 0 4px;">You will be redirected to Paystack's secure checkout to complete payment. SOLEA never receives or stores your card details.</p>
+          <button class="btn btn-dark" type="submit">Pay securely <span>↗</span></button>
+        </form>
+        <div class="success" id="checkoutSuccess" role="status">
+          <h2>Order received.</h2>
+          <p>Payment confirmed. Your order is now being prepared.</p>
+          <a class="btn btn-dark" href="index.html">Return home ↗</a>
+        </div>
+      </div>
+
+      <aside class="checkout-summary">
+        <p class="eyebrow">ORDER SUMMARY</p>
+        <div id="checkoutItems"></div>
+        <div class="checkout-total"><span>Total</span><b id="checkoutTotal">$0.00</b></div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-bottom" style="margin-top:0">
+      <span>© 2026 SOLEA Marketplace</span>
+      <span>Secure payments · Paystack</span>
+    </div>
+  </footer>
+
+  <script>
+    window.SOLEA_API_URL = window.SOLEA_API_URL || 'http://localhost:4000';
+  </script>
+  <script src="script.js"></script>
+  <script src="checkout-production.js"></script>
+</body>
+</html>
