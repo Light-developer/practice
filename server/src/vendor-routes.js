@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { query } from './db.js';
+import { query, pool } from './db.js';
 
 const router = express.Router();
 const jwtSecret = process.env.JWT_SECRET;
@@ -57,7 +57,7 @@ function validateProductInput(body) {
 }
 
 router.post('/register', async (req, res, next) => {
-  const client = await (await import('./db.js')).pool.connect();
+  const client = await pool.connect();
   try {
     const { brand, email, password, country, story } = req.body;
     if (typeof brand !== 'string' || brand.trim().length < 2 || brand.trim().length > 160 || !validateEmail(email) || typeof password !== 'string' || password.length < 10 || typeof country !== 'string' || country.trim().length < 2) {
@@ -125,26 +125,26 @@ router.get('/dashboard', authRequired, vendorRequired, async (req, res, next) =>
     const vendor = vendorResult.rows[0];
     if (!vendor) return res.status(404).json({ error: 'Vendor profile not found.' });
 
-    const metricsResult = await query(`
-      SELECT
-        COALESCE(SUM(oi.line_total_kobo) FILTER (WHERE o.status IN ('paid','processing','shipped','delivered')), 0) AS gross_sales,
-        COUNT(DISTINCT o.id) FILTER (WHERE o.status IN ('paid','processing','shipped','delivered')) AS orders,
-        COALESCE(SUM(oi.quantity) FILTER (WHERE o.status IN ('paid','processing','shipped','delivered')), 0) AS units_sold,
-        COALESCE(SUM(p.stock) FILTER (WHERE p.vendor_id = v.id AND p.active = TRUE), 0) AS available_stock
-      FROM vendors v
-      LEFT JOIN products p ON p.vendor_id = v.id
-      LEFT JOIN order_items oi ON oi.vendor_id = v.id
-      LEFT JOIN orders o ON o.id = oi.order_id
-      WHERE v.id = $1
-      GROUP BY v.id
-    `, [vendor.id]);
+    const [salesResult, ordersResult, unitsResult, stockResult] = await Promise.all([
+      query(`SELECT COALESCE(SUM(oi.line_total_kobo), 0) AS gross_sales
+             FROM order_items oi JOIN orders o ON o.id = oi.order_id
+             WHERE oi.vendor_id = $1 AND o.status IN ('paid','processing','shipped','delivered')`, [vendor.id]),
+      query(`SELECT COUNT(DISTINCT o.id) AS orders
+             FROM order_items oi JOIN orders o ON o.id = oi.order_id
+             WHERE oi.vendor_id = $1 AND o.status IN ('paid','processing','shipped','delivered')`, [vendor.id]),
+      query(`SELECT COALESCE(SUM(oi.quantity), 0) AS units_sold
+             FROM order_items oi JOIN orders o ON o.id = oi.order_id
+             WHERE oi.vendor_id = $1 AND o.status IN ('paid','processing','shipped','delivered')`, [vendor.id]),
+      query(`SELECT COALESCE(SUM(stock), 0) AS available_stock
+             FROM products WHERE vendor_id = $1 AND active = TRUE`, [vendor.id])
+    ]);
 
     const productsResult = await query(`
       SELECT id, name, brand, category, price_kobo, currency, stock, active, badge, image_url, created_at
       FROM products WHERE vendor_id = $1 ORDER BY created_at DESC
     `, [vendor.id]);
 
-    const ordersResult = await query(`
+    const recentOrdersResult = await query(`
       SELECT o.id, o.order_number, o.full_name, o.delivery_address, o.status, o.created_at,
              SUM(oi.line_total_kobo) AS vendor_total,
              json_agg(json_build_object('name', oi.product_name, 'quantity', oi.quantity)) AS items
@@ -158,19 +158,24 @@ router.get('/dashboard', authRequired, vendorRequired, async (req, res, next) =>
 
     res.json({
       vendor,
-      metrics: metricsResult.rows[0] || { gross_sales: 0, orders: 0, units_sold: 0, available_stock: 0 },
+      metrics: {
+        gross_sales: salesResult.rows[0].gross_sales,
+        orders: ordersResult.rows[0].orders,
+        units_sold: unitsResult.rows[0].units_sold,
+        available_stock: stockResult.rows[0].available_stock
+      },
       products: productsResult.rows,
-      orders: ordersResult.rows
+      orders: recentOrdersResult.rows
     });
   } catch (error) { next(error); }
 });
 
 router.post('/products', authRequired, vendorRequired, async (req, res, next) => {
   try {
-    const vendorResult = await query('SELECT id, status FROM vendors WHERE user_id = $1', [req.user.sub]);
+    const vendorResult = await query('SELECT id, brand_name, status FROM vendors WHERE user_id = $1', [req.user.sub]);
     const vendor = vendorResult.rows[0];
     if (!vendor) return res.status(404).json({ error: 'Vendor profile not found.' });
-    const product = validateProductInput(req.body);
+    const product = validateProductInput({ ...req.body, brand: vendor.brand_name });
     const result = await query(`
       INSERT INTO products (vendor_id, name, brand, category, description, price_kobo, currency, image_url, badge, stock, active)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
@@ -185,10 +190,10 @@ router.post('/products', authRequired, vendorRequired, async (req, res, next) =>
 
 router.patch('/products/:id', authRequired, vendorRequired, async (req, res, next) => {
   try {
-    const vendorResult = await query('SELECT id FROM vendors WHERE user_id = $1', [req.user.sub]);
+    const vendorResult = await query('SELECT id, brand_name FROM vendors WHERE user_id = $1', [req.user.sub]);
     const vendor = vendorResult.rows[0];
     if (!vendor) return res.status(404).json({ error: 'Vendor profile not found.' });
-    const product = validateProductInput(req.body);
+    const product = validateProductInput({ ...req.body, brand: vendor.brand_name });
     const result = await query(`
       UPDATE products
       SET name=$1, brand=$2, category=$3, description=$4, price_kobo=$5, image_url=$6, badge=$7, stock=$8, updated_at=NOW()
