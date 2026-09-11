@@ -1,4 +1,4 @@
-const SOLEA_API = window.SOLEA_API_URL || 'http://localhost:4000';
+const SOLEA_API = window.SOLEA_API_URL || `http://${window.location.hostname || 'localhost'}:4000`;
 let currentVendor = null;
 
 async function vendorApi(path, options = {}) {
