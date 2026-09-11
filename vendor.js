@@ -7,9 +7,16 @@ async function vendorApi(path, options = {}) {
     headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
     ...options
   });
+
   let data = null;
   try { data = await response.json(); } catch {}
-  if (!response.ok) throw new Error(data?.error || 'Something went wrong.');
+
+  if (!response.ok) {
+    const error = new Error(data?.error || `Request failed (${response.status}).`);
+    error.status = response.status;
+    throw error;
+  }
+
   return data;
 }
 
@@ -38,6 +45,7 @@ async function initVendorAuth() {
     event.preventDefault();
     const button = registerForm.querySelector('button[type="submit"]');
     setButtonLoading(button, true);
+
     try {
       await vendorApi('/api/vendors/register', {
         method: 'POST',
@@ -49,7 +57,7 @@ async function initVendorAuth() {
           story: document.getElementById('registerStory').value.trim()
         })
       });
-      location.href = 'vendor-dashboard.html';
+      window.location.replace('vendor-dashboard.html');
     } catch (error) {
       showVendorMessage(error.message);
       setButtonLoading(button, false, 'Create partner account ↗');
@@ -60,6 +68,7 @@ async function initVendorAuth() {
     event.preventDefault();
     const button = loginForm.querySelector('button[type="submit"]');
     setButtonLoading(button, true);
+
     try {
       const data = await vendorApi('/api/auth/login', {
         method: 'POST',
@@ -68,11 +77,13 @@ async function initVendorAuth() {
           password: document.getElementById('vendorPassword').value
         })
       });
+
       if (data.user?.role !== 'vendor') {
         await vendorApi('/api/auth/logout', { method: 'POST' }).catch(() => {});
         throw new Error('This account is not a SOLEA partner account.');
       }
-      location.href = 'vendor-dashboard.html';
+
+      window.location.replace('vendor-dashboard.html');
     } catch (error) {
       showVendorMessage(error.message);
       setButtonLoading(button, false, 'Enter dashboard ↗');
@@ -89,7 +100,11 @@ function escapeHtml(value) {
 }
 
 function renderVendorDashboard(data) {
-  const { vendor, metrics, products, orders } = data;
+  const vendor = data.vendor || {};
+  const metrics = data.metrics || {};
+  const products = Array.isArray(data.products) ? data.products : [];
+  const orders = Array.isArray(data.orders) ? data.orders : [];
+
   currentVendor = vendor;
   const brand = vendor.brand_name || 'Your House';
   const first = brand.split(/\s+/)[0];
@@ -97,7 +112,13 @@ function renderVendorDashboard(data) {
   document.getElementById('dashboardBrand')?.replaceChildren(document.createTextNode(brand));
   document.getElementById('settingsBrand')?.replaceChildren(document.createTextNode(brand));
   document.getElementById('settingsEmail')?.replaceChildren(document.createTextNode(vendor.email || ''));
-  document.getElementById('settingsStatus')?.replaceChildren(document.createTextNode(vendor.status || 'pending'));
+
+  const status = vendor.status || 'pending';
+  const statusElement = document.getElementById('settingsStatus');
+  if (statusElement) {
+    statusElement.textContent = status;
+    statusElement.className = `status ${status === 'approved' ? 'live' : 'draft'}`;
+  }
 
   const greeting = document.getElementById('dashboardGreeting');
   if (greeting) greeting.innerHTML = `Welcome, <em>${escapeHtml(first)}.</em>`;
@@ -132,8 +153,12 @@ function renderVendorDashboard(data) {
 
   const pending = document.getElementById('vendorApprovalNotice');
   if (pending) {
-    pending.hidden = vendor.status === 'approved';
-    if (vendor.status !== 'approved') pending.textContent = 'Your partner application is pending review. Products you add will remain unpublished until SOLEA approves your house.';
+    pending.hidden = status === 'approved';
+    if (status !== 'approved') {
+      pending.textContent = status === 'suspended'
+        ? 'Your partner account is currently suspended. Contact SOLEA support before publishing new products.'
+        : 'Your partner application is pending review. Products you add will remain unpublished until SOLEA approves your house.';
+    }
   }
 }
 
@@ -162,20 +187,42 @@ async function addProduct() {
 }
 
 async function loadVendorDashboard() {
+  const dashboard = document.querySelector('.dashboard-main');
   try {
     const data = await vendorApi('/api/vendors/dashboard');
     renderVendorDashboard(data);
   } catch (error) {
-    location.href = 'vendor-login.html';
+    if (error.status === 401 || error.status === 403) {
+      window.location.replace('vendor-login.html');
+      return;
+    }
+
+    const message = error.message || 'Unable to load your partner dashboard.';
+    if (dashboard) {
+      dashboard.innerHTML = `
+        <section class="dashboard-error" aria-live="assertive">
+          <p class="eyebrow">PARTNER PORTAL</p>
+          <h1>We could not load<br><em>your dashboard.</em></h1>
+          <p>${escapeHtml(message)}</p>
+          <button class="btn btn-dark" type="button" onclick="window.location.reload()">Try again ↻</button>
+        </section>`;
+    } else {
+      showVendorMessage(message);
+    }
   }
 }
 
 async function initVendorDashboard() {
   if (!document.getElementById('vendorProductsBody')) return;
+
   await loadVendorDashboard();
 
   document.getElementById('vendorLogout')?.addEventListener('click', async () => {
-    try { await vendorApi('/api/auth/logout', { method: 'POST' }); } finally { location.href = 'vendor-login.html'; }
+    try {
+      await vendorApi('/api/auth/logout', { method: 'POST' });
+    } finally {
+      window.location.replace('vendor-login.html');
+    }
   });
 
   document.getElementById('addProductDemo')?.addEventListener('click', addProduct);
