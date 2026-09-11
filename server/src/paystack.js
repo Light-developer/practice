@@ -17,7 +17,7 @@ export async function initializeTransaction({ email, amount, reference, callback
     body: JSON.stringify({
       email,
       amount: String(amount),
-      currency: process.env.PAYSTACK_CURRENCY || 'NGN',
+      currency: process.env.PAYSTACK_CURRENCY || 'USD',
       reference,
       callback_url: callbackUrl,
       metadata: JSON.stringify(metadata)
@@ -39,7 +39,9 @@ export async function verifyTransaction(reference) {
 }
 
 export function verifyWebhookSignature(rawBody, signature) {
-  if (!signature || !process.env.PAYSTACK_SECRET_KEY) return false;
-  const hash = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY).update(rawBody).digest('hex');
-  return crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(signature));
+  if (!signature || !process.env.PAYSTACK_SECRET_KEY || !Buffer.isBuffer(rawBody)) return false;
+  const expected = crypto.createHmac('sha512', process.env.PAYSTACK_SECRET_KEY).update(rawBody).digest('hex');
+  const provided = String(signature).trim().toLowerCase();
+  if (provided.length !== expected.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(expected, 'utf8'), Buffer.from(provided, 'utf8'));
 }
