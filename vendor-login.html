@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Secure SOLEA partner portal login.">
   <title>Vendor Login — SOLEA</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="vendor-dashboard.css">
+  <link rel="stylesheet" href="vendor-login.css">
 </head>
-<body class="dashboard-body">
+<body>
   <header class="site-header">
     <div class="container nav-wrap">
       <a class="logo" href="index.html">SOLEA<span>®</span></a>
@@ -17,7 +16,7 @@
   </header>
 
   <main class="auth-shell">
-    <section class="auth-card reveal">
+    <section class="auth-card">
       <p class="eyebrow">SOLEA PARTNER PORTAL</p>
       <h1>Welcome<br><em>back.</em></h1>
       <p class="auth-copy">Sign in securely to manage your house, collection and marketplace orders.</p>
@@ -41,7 +40,6 @@
 
   <div class="toast" id="toast"></div>
   <script>window.SOLEA_API_URL = window.SOLEA_API_URL || 'http://localhost:4000';</script>
-  <script src="script.js"></script>
-  <script src="vendor.js"></script>
+  <script src="vendor.js" defer></script>
 </body>
 </html>
