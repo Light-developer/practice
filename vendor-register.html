@@ -84,7 +84,7 @@
   </footer>
 
   <div class="toast" id="toast"></div>
-  <script>window.SOLEA_API_URL = window.SOLEA_API_URL || 'http://localhost:4000';</script>
+  <script>window.SOLEA_API_URL = window.SOLEA_API_URL || `http://${window.location.hostname || 'localhost'}:4000`;</script>
   <script src="script.js" defer></script>
   <script src="vendor.js" defer></script>
 </body>
