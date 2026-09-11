@@ -52,6 +52,16 @@ function authRequired(req, res, next) {
   }
 }
 
+function authOptional(req, _res, next) {
+  try {
+    const token = req.cookies.solea_session;
+    if (token && jwtSecret) req.user = jwt.verify(token, jwtSecret);
+  } catch {
+    // An invalid optional session is treated as an anonymous customer.
+  }
+  next();
+}
+
 function validateEmail(email) {
   return typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -157,7 +167,7 @@ app.get('/api/products/:id', async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
-app.post('/api/orders/initialize-payment', paymentLimiter, async (req, res, next) => {
+app.post('/api/orders/initialize-payment', paymentLimiter, authOptional, async (req, res, next) => {
   const client = await pool.connect();
   try {
     const { email, fullName, deliveryAddress, items } = req.body;
