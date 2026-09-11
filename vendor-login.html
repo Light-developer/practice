@@ -5,14 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Secure SOLEA partner portal login.">
   <title>Vendor Login — SOLEA</title>
-  <link rel="preload" href="vendor-login.css" as="style">
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="vendor-login.css">
 </head>
 <body>
-  <header class="site-header">
+  <div class="announcement">Complimentary delivery on orders over $150 <span>·</span> Curated from independent footwear houses</div>
+
+  <header class="site-header" id="siteHeader">
     <div class="container nav-wrap">
+      <button class="icon-btn mobile-only" id="menuBtn" aria-label="Open menu">☰</button>
       <a class="logo" href="index.html">SOLEA<span>®</span></a>
-      <a class="text-link" href="vendor.html">Become a partner ↗</a>
+      <nav class="desktop-nav">
+        <a href="shop.html">Shop</a>
+        <a href="brands.html">Brands</a>
+        <a href="vendor.html">Sell on SOLEA</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="icon-btn" href="shop.html" aria-label="Search">⌕</a>
+        <a class="icon-btn cart-link" href="cart.html" aria-label="Cart">Bag <b class="cart-count">0</b></a>
+      </div>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <a href="shop.html">Shop</a>
+      <a href="brands.html">Brands</a>
+      <a href="vendor.html">Sell on SOLEA</a>
+      <a href="vendor-register.html">Become a partner</a>
+      <a href="cart.html">Bag <span class="cart-count">0</span></a>
     </div>
   </header>
 
@@ -39,7 +57,15 @@
     </section>
   </main>
 
+  <footer class="footer">
+    <div class="container footer-bottom">
+      <span>© 2026 SOLEA Marketplace</span>
+      <span>For independent footwear brands</span>
+    </div>
+  </footer>
+
   <script>window.SOLEA_API_URL = window.SOLEA_API_URL || 'http://localhost:4000';</script>
+  <script src="script.js" defer></script>
   <script src="vendor-login.js" defer></script>
 </body>
 </html>
