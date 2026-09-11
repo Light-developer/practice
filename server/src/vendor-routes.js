@@ -41,7 +41,7 @@ function validateProductInput(body) {
   if (category.length < 2 || category.length > 100) throw new Error('Category is required.');
   if (!Number.isFinite(price) || price <= 0 || price > 1000000) throw new Error('Enter a valid product price.');
   if (!Number.isInteger(stock) || stock < 0 || stock > 1000000) throw new Error('Enter a valid stock quantity.');
-  if (imageUrl && imageUrl.length > 1000) throw new Error('Image URL is too long.');
+  if (!imageUrl || imageUrl.length > 1000) throw new Error('A product image URL is required.');
   if (description.length > 5000) throw new Error('Description is too long.');
 
   return {
@@ -51,7 +51,7 @@ function validateProductInput(body) {
     description,
     priceKobo: Math.round(price * 100),
     stock,
-    imageUrl: imageUrl || null,
+    imageUrl,
     badge: badge || null
   };
 }
@@ -94,7 +94,7 @@ router.post('/register', async (req, res, next) => {
     res.status(201).json({ user, vendor: { brand_name: brand.trim(), country: country.trim(), status: 'pending' } });
   } catch (error) {
     await client.query('ROLLBACK').catch(() => {});
-    if (error.code === '23505') return res.status(409).json({ error: 'An account with that email already exists.' });
+    if (error.code === '23505') return res.status(409).json({ error: 'An account with that email or brand already exists.' });
     next(error);
   } finally {
     client.release();
@@ -183,7 +183,7 @@ router.post('/products', authRequired, vendorRequired, async (req, res, next) =>
     `, [vendor.id, product.name, product.brand, product.category, product.description || null, product.priceKobo, process.env.PAYSTACK_CURRENCY || 'USD', product.imageUrl, product.badge, product.stock, vendor.status === 'approved']);
     res.status(201).json({ product: result.rows[0] });
   } catch (error) {
-    if (error.message?.startsWith('Product ') || error.message?.startsWith('Brand ') || error.message?.startsWith('Category ') || error.message?.startsWith('Enter ') || error.message?.includes('Description') || error.message?.includes('Image')) return res.status(400).json({ error: error.message });
+    if (error.message?.startsWith('Product ') || error.message?.startsWith('Brand ') || error.message?.startsWith('Category ') || error.message?.startsWith('Enter ') || error.message?.includes('Description') || error.message?.includes('image')) return res.status(400).json({ error: error.message });
     next(error);
   }
 });
