@@ -1,5 +1,5 @@
 (() => {
-  const API = window.SOLEA_API_URL || 'http://localhost:4000';
+  const API = window.SOLEA_API_URL || `http://${window.location.hostname || 'localhost'}:4000`;
   const form = document.getElementById('vendorLoginForm');
   if (!form) return;
 
