@@ -1,1 +1,103 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Partner Dashboard — SOLEA</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="vendor-dashboard.css"></head><body class="dashboard-body"><div class="dashboard-shell"><aside class="dashboard-sidebar"><a class="logo" href="index.html">SOLEA<span>®</span></a><div class="dashboard-brand"><span>PARTNER HOUSE</span><strong id="dashboardBrand">Your House</strong></div><nav class="dashboard-nav"><a class="active" href="#overview">Overview</a><a href="#products">Products</a><a href="#orders">Orders</a><a href="#analytics">Analytics</a><a href="#settings">Store settings</a></nav><button id="vendorLogout" class="dashboard-logout">Log out ↗</button></aside><main class="dashboard-main"><header class="dashboard-top"><div><p class="eyebrow">PARTNER PORTAL</p><h1 id="dashboardGreeting">Good morning.</h1></div><a class="btn btn-dark" href="shop.html">View marketplace <span>↗</span></a></header><section id="overview" class="dashboard-section"><div class="metric-grid"><article class="metric-card"><span>Gross sales</span><strong>$24,860</strong><small>+18.4% this month</small></article><article class="metric-card"><span>Orders</span><strong>184</strong><small>+12 new today</small></article><article class="metric-card"><span>Units sold</span><strong>312</strong><small>76% sell-through</small></article><article class="metric-card"><span>Available stock</span><strong>428</strong><small>8 low-stock styles</small></article></div></section><section id="products" class="dashboard-section dashboard-panel"><div class="panel-head"><div><p class="eyebrow">CATALOGUE</p><h2>Your collection</h2></div><button class="btn btn-dark" id="addProductDemo">Add product <span>+</span></button></div><div class="table-wrap"><table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th></tr></thead><tbody><tr><td><strong>Studio Runner</strong><small>Core collection</small></td><td>Sneakers</td><td>$240</td><td>82</td><td><span class="status live">Live</span></td></tr><tr><td><strong>Form 02</strong><small>Autumn edit</small></td><td>Loafers</td><td>$310</td><td>14</td><td><span class="status low">Low stock</span></td></tr><tr><td><strong>Axis Boot</strong><small>Permanent</small></td><td>Boots</td><td>$480</td><td>0</td><td><span class="status draft">Draft</span></td></tr></tbody></table></div></section><section id="orders" class="dashboard-section dashboard-panel"><div class="panel-head"><div><p class="eyebrow">RECENT ACTIVITY</p><h2>Latest orders</h2></div><span class="panel-meta">12 orders today</span></div><div class="order-list"><div><span>#SO-10482</span><strong>Studio Runner × 2</strong><small>Accra · Processing</small><b>$480</b></div><div><span>#SO-10479</span><strong>Form 02 × 1</strong><small>Lagos · Shipped</small><b>$310</b></div><div><span>#SO-10471</span><strong>Studio Runner × 1</strong><small>London · Delivered</small><b>$240</b></div></div></section><section id="analytics" class="dashboard-section"><div class="analytics-card"><div><p class="eyebrow">PERFORMANCE</p><h2>Sales are moving<br><em>upward.</em></h2><p>Monthly gross merchandise value across your SOLEA collection.</p></div><div class="bars" aria-label="Sales chart"><i style="height:34%"></i><i style="height:48%"></i><i style="height:42%"></i><i style="height:61%"></i><i style="height:68%"></i><i style="height:82%"></i><i style="height:100%"></i></div></div></section><section id="settings" class="dashboard-section dashboard-panel"><div class="panel-head"><div><p class="eyebrow">HOUSE PROFILE</p><h2>Store settings</h2></div></div><div class="settings-grid"><div><span>Brand name</span><strong id="settingsBrand">Your House</strong></div><div><span>Partner email</span><strong id="settingsEmail">partner@yourhouse.com</strong></div><div><span>Store status</span><strong><span class="status live">Live</span></strong></div></div></section></main></div><div class="toast" id="toast"></div><script src="script.js"></script><script src="vendor.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SOLEA partner dashboard for managing footwear collections and orders.">
+  <title>Partner Dashboard — SOLEA</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="vendor-dashboard.css">
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <aside class="dashboard-sidebar">
+      <a class="logo" href="index.html">SOLEA<span>®</span></a>
+      <div class="dashboard-brand">
+        <span>PARTNER HOUSE</span>
+        <strong id="dashboardBrand">Your House</strong>
+      </div>
+      <nav class="dashboard-nav" aria-label="Partner dashboard">
+        <a class="active" href="#overview">Overview</a>
+        <a href="#products">Products</a>
+        <a href="#orders">Orders</a>
+        <a href="#analytics">Analytics</a>
+        <a href="#settings">Store settings</a>
+      </nav>
+      <button id="vendorLogout" class="dashboard-logout" type="button">Log out ↗</button>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-top">
+        <div>
+          <p class="eyebrow">PARTNER PORTAL</p>
+          <h1 id="dashboardGreeting">Welcome.</h1>
+        </div>
+        <a class="btn btn-dark" href="shop.html">View marketplace <span>↗</span></a>
+      </header>
+
+      <section id="vendorApprovalNotice" class="dashboard-panel" hidden aria-live="polite"></section>
+
+      <section id="overview" class="dashboard-section">
+        <div class="metric-grid">
+          <article class="metric-card"><span>Gross sales</span><strong id="metricSales">$0.00</strong><small>Paid marketplace orders</small></article>
+          <article class="metric-card"><span>Orders</span><strong id="metricOrders">0</strong><small>Paid and fulfilled orders</small></article>
+          <article class="metric-card"><span>Units sold</span><strong id="metricUnits">0</strong><small>Across your collection</small></article>
+          <article class="metric-card"><span>Available stock</span><strong id="metricStock">0</strong><small>Currently listed inventory</small></article>
+        </div>
+      </section>
+
+      <section id="products" class="dashboard-section dashboard-panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">CATALOGUE</p><h2>Your collection</h2></div>
+          <button class="btn btn-dark" id="addProductDemo" type="button">Add product <span>+</span></button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th></tr></thead>
+            <tbody id="vendorProductsBody"><tr><td colspan="5">Loading your collection…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="orders" class="dashboard-section dashboard-panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">RECENT ACTIVITY</p><h2>Latest orders</h2></div>
+          <span class="panel-meta" id="ordersMeta">Loading…</span>
+        </div>
+        <div class="order-list" id="vendorOrdersList">
+          <div><span>Loading…</span><strong>Fetching recent orders</strong><small>Please wait</small><b>—</b></div>
+        </div>
+      </section>
+
+      <section id="analytics" class="dashboard-section">
+        <div class="analytics-card">
+          <div>
+            <p class="eyebrow">PERFORMANCE</p>
+            <h2>Your SOLEA<br><em>collection.</em></h2>
+            <p>Sales and inventory figures shown here are pulled from your live marketplace records.</p>
+          </div>
+          <div class="bars" aria-label="Sales performance chart">
+            <i style="height:20%"></i><i style="height:20%"></i><i style="height:20%"></i><i style="height:20%"></i><i style="height:20%"></i><i style="height:20%"></i><i style="height:20%"></i>
+          </div>
+        </div>
+      </section>
+
+      <section id="settings" class="dashboard-section dashboard-panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">HOUSE PROFILE</p><h2>Store settings</h2></div>
+        </div>
+        <div class="settings-grid">
+          <div><span>Brand name</span><strong id="settingsBrand">Your House</strong></div>
+          <div><span>Partner email</span><strong id="settingsEmail">partner@yourhouse.com</strong></div>
+          <div><span>Store status</span><strong><span class="status live" id="settingsStatus">pending</span></strong></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script>window.SOLEA_API_URL = window.SOLEA_API_URL || 'http://localhost:4000';</script>
+  <script src="script.js"></script>
+  <script src="vendor.js"></script>
+</body>
+</html>
