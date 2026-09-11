@@ -1,4 +1,5 @@
 const SOLEA_API = window.SOLEA_API_URL || 'http://localhost:4000';
+let currentVendor = null;
 
 async function vendorApi(path, options = {}) {
   const response = await fetch(`${SOLEA_API}${path}`, {
@@ -89,6 +90,7 @@ function escapeHtml(value) {
 
 function renderVendorDashboard(data) {
   const { vendor, metrics, products, orders } = data;
+  currentVendor = vendor;
   const brand = vendor.brand_name || 'Your House';
   const first = brand.split(/\s+/)[0];
 
@@ -144,12 +146,13 @@ async function addProduct() {
   if (!price) return;
   const stock = window.prompt('Stock quantity', '10');
   if (stock === null) return;
-  const imageUrl = window.prompt('Product image URL (optional)', '');
+  const imageUrl = window.prompt('Product image URL');
+  if (!imageUrl) return;
 
   try {
     await vendorApi('/api/vendors/products', {
       method: 'POST',
-      body: JSON.stringify({ name, brand: name, category, price, stock, imageUrl })
+      body: JSON.stringify({ name, category, price, stock, imageUrl, brand: currentVendor?.brand_name || '' })
     });
     showVendorMessage('Product saved successfully.');
     await loadVendorDashboard();
